@@ -1,18 +1,11 @@
-const Login = () => {
+import Login from '../../components/login'
+
+const PageLogin = () => {
     return (
         <>
-            <div>
-                <label>
-                    Nome:
-                    <input type="text" ></input>
-                </label>
-                <label>
-                    Senha:
-                    <input type="password" ></input>
-                </label>
-            </div>
+           <Login />
         </>
     );
 };
 
-export default Login;
+export default PageLogin;
