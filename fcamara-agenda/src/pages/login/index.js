@@ -1,7 +1,7 @@
 const Login = () => {
     return (
         <>
-            <wrapper>
+            <div>
                 <label>
                     Nome:
                     <input type="text" ></input>
@@ -10,7 +10,7 @@ const Login = () => {
                     Senha:
                     <input type="password" ></input>
                 </label>
-            </wrapper>
+            </div>
         </>
     );
 };
