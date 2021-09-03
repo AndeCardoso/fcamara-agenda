@@ -1,3 +1,5 @@
+import Button from '../dumb/button'
+import Input from '../dumb/input'
 import './style.css'
 
 const Login = () => {
@@ -5,12 +7,13 @@ const Login = () => {
         <div className="wrapper-login">
             <label>
                 E-mail:
-                <input type="text" />
+                <Input type="text" onChange={""} />
             </label>
             <label>
                 Senha:
-                <input type="password" />
+                <Input type="password" onChange={""} />
             </label>
+            <Button type="submit" onClick="">Entrar</Button>
         </div>
     );
 };
