@@ -1,9 +1,9 @@
-import { useState } from "react/cjs/react.development";
+// import { useState } from "react";
 import Button from "../dumb/button";
 import Input from "../dumb/input";
 
 const Cadastro = () => {
-    const [cadastro, setCadastro] = useState({});
+    // const [cadastro, setCadastro] = useState({});
 
     return (
         <div className="wrapper">
