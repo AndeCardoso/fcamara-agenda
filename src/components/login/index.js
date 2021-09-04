@@ -20,6 +20,8 @@ const Login = () => {
         } else {
             if (email === usuario.email & senha === usuario.senha) {
                 alert( email + " logado com sucesso!");
+            } else {
+                alert("Usuario ou senha invalidos!")
             }
         }
     };
