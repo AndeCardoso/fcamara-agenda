@@ -1,31 +1,28 @@
-import { useState } from 'react/cjs/react.development';
-import Button from '../dumb/button'
-import Input from '../dumb/input'
-import './style.css'
+import { useState } from 'react';
+import Input from '../dumb/input';
+import Button from '../dumb/button';
+import api from '../../services/api'
+import './style.css';
 
 const Login = () => {
-    const [email, setEmail] = useState();
-    const [senha, setSenha] = useState();
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
 
-    let usuario = [email, senha];
-    usuario.email = "admin";
-    usuario.senha = "admin";
+    const onClick = async () => {
 
-    const submitLogin = () => {
-        if (!email) {
-            alert("Informe um E-mail para fazer login!");
+        const data = {
+            email: email,
+            password: senha
+        }  
+        
+        const response = await api.post('/user/signin', data);
+        
+        if (response.data.token) {
+            alert('usuairo logado com token: ' + response.data.token)
         }
-        if (!senha) {
-            alert("Informe uma Senha para fazer login!");
-        } else {
-            if (email === usuario.email & senha === usuario.senha) {
-                alert( email + " logado com sucesso!");
-            } else {
-                alert("Usuario ou senha invalidos!")
-            }
-        }
+        console.log(response);        
     };
-
+    
     return (
         <div className="wrapper-login">
             <h1>Login</h1>
@@ -37,7 +34,7 @@ const Login = () => {
                 Senha:
                 <Input type="password" onChange={(event => setSenha(event.target.value))} />
             </label>
-            <Button type="submit" onClick={submitLogin}>Entrar</Button>
+            <Button type="submit" onClick={onClick}>Entrar</Button>
         </div>
     );
 };

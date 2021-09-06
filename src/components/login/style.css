@@ -4,3 +4,8 @@
     align-items: center;
     justify-self: flex-start;
 }
+
+.form-login {
+    display: flex;
+    flex-direction: column;
+}
