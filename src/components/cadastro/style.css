@@ -1,0 +1,11 @@
+.wrapper-cadastro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-cadastro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}

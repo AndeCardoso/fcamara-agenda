@@ -3,9 +3,9 @@ import './style.css';
 
 const PageCadastro = () => {
     return (
-        <main>
+        <div>
            <Cadastro />
-        </main>
+        </div>
     );
 };
 
