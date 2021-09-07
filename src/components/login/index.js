@@ -27,7 +27,7 @@ const Login = () => {
                 const erro = JSON.stringify(response.data.error.email.msg);
                 setAlerta(erro);
             } else {
-                const erro = JSON.stringify(response.data.error);
+                const erro = JSON.stringify(response.data.error.password);
                 setAlerta(erro);
             }
         }
