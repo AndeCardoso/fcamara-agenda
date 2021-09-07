@@ -3,6 +3,7 @@ import { history } from '../../history';
 import api from '../../services/api';
 import Button from '../dumb/button';
 import Input from '../dumb/input';
+import Alert from '../dumb/alert';
 import './style.css';
 
 const Cadastro = () => {
@@ -54,7 +55,7 @@ const Cadastro = () => {
     return (
         <div className="wrapper-cadastro">
             <h1>Cadastro</h1>
-            <span>{alerta}</span>
+            <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="form-cadastro">
                 <label>
                     Nome
