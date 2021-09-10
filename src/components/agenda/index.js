@@ -19,7 +19,7 @@ const Agenda = () => {
         } else {
             return value.dayEl.style.backgroundColor = 'orange';
         }
-            // setMarcar = { title: 'Agendado pra fulano', date: value.dateStr};
+        // setMarcar = { title: 'Agendado pra fulano', date: value.dateStr};
         console.log(date.values)
     }
 

@@ -1,6 +1,11 @@
-const Button = ({type, children, onClick}) => {
+import { Link } from "react-router-dom";
+import './style.css';
+
+const Button = ({destiny, type, children, onClick}) => {
     return (
-        <button type={type} onClick={onClick} >{children}</button>
+        <Link to={ destiny }>
+            <button type={ type } onClick={onClick}>{children}</button>
+        </Link>
     );
 };
 

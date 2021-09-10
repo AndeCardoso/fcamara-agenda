@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { history } from '../../history';
+import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import Button from '../dumb/button';
 import Input from '../dumb/input';
 import Alert from '../dumb/alert';
+
 import './style.css';
+import { dbValidationRegister } from '../../services/dbValidations';
 
 const Cadastro = () => {
     const [nome, setNome] = useState('');
@@ -12,13 +13,73 @@ const Cadastro = () => {
     const [senha, setSenha] = useState('');
     const [verifSenha, setVerifSenha] = useState('');
 
-    const [alerta, setAlerta] = useState('');
+    const [alertaSenha, setAlertaSenha] = useState({type: '', msg: ''});
+    const [alerta, setAlerta] = useState({type: '', msg: ''});
 
-    const verificaSenha = (event) => {        
-        if (senha === event.target.value) {
-            setVerifSenha("Senha confirmada!");
+    //state senha listener
+    useEffect(() => {
+        verificaSenha(verifSenha);
+    }, [senha]);
+    
+    const validaEmail = (event) => {
+        const value = event.target.value;
+
+        if ( value.includes("@") && value.includes(".") ) {
+            setEmail(value);
+            setAlerta({});
         } else {
-            setVerifSenha("Senhas diferentes!");
+            setAlerta({
+                type: 'error',
+                msg: 'Formato de E-mail invalido!'
+            });
+        }
+    }
+    
+    const validaNome = (event) => {
+        const value = event.target.value;
+        if ( value.length < 2 && value.length !== 0 ){
+            setAlerta({
+                type: 'error',
+                msg: 'O nome precisa de 2 letras!'
+            });
+        } else {
+            setAlerta({});
+            setNome(value);
+        }
+    };
+
+    const validaSenha = (event) => {
+        const value = event.target.value;
+        if ( value.length < 6 && value.length !== 0 ){
+            setAlerta({
+                type: 'error',
+                msg: 'A senha precisa de 6 caracteres!'
+            });
+            setSenha(value);
+        } else {
+            setAlerta({});
+            setSenha(value);
+        }
+    };
+
+    const verificaSenha = (event) => {
+        setVerifSenha();
+        if (event) {
+            if (senha === event) {
+                setAlertaSenha({
+                    type: 'sucess',
+                    msg: 'Senha confirmada'
+                });
+                setVerifSenha(event);
+            } else {
+                setAlertaSenha({
+                    type: 'error',
+                    msg: 'Senhas diferentes!'
+                });
+                setVerifSenha(event);
+            }
+        } else {
+            setAlertaSenha({})
         }
     };
 
@@ -28,26 +89,20 @@ const Cadastro = () => {
             name: nome,
             email: email,
             password: senha
-        }  
-        
-        const response = await api.post('/user/signup', data);
+        }
 
-        if ( response.data.token) {
-            localStorage.setItem('cadastro-token', response.data.token)
-            history.push('/')
+        if (!nome || !email || !senha) {
+            setAlerta({
+                type: 'error',
+                msg: 'Preencha todos os campos!'
+            })
         } else {
-            console.log(response.data)
-            if (response.data.error.password) {
-                const erro = JSON.stringify(response.data.error.password.msg);
-                setAlerta(erro);
-            } else { 
-                if (response.data.error.name) {
-                    const erro = JSON.stringify(response.data.error.name.msg);
-                    setAlerta(erro);
-                } else {
-                    const erro = JSON.stringify(response.data.error.email.msg);
-                    setAlerta(erro);
-                }
+            const response = await api.post('/user/signup', data);
+
+            if ( response.data.token) {
+                localStorage.setItem('cadastro-token', response.data.token)
+            } else {
+                setAlerta(dbValidationRegister(response));
             }
         }
     };
@@ -57,25 +112,13 @@ const Cadastro = () => {
             <h1>Cadastro</h1>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="form-cadastro">
-                <label>
-                    Nome
-                    <Input type="text" onChange={ (event) => setNome(event.target.value) }/>
-                </label>
-                <label>
-                    E-mail
-                    <Input type="email" onChange={ (event) => setEmail(event.target.value) }/>
-                </label>
-                <label>
-                    Senha
-                    <Input type="password" onChange={ (event) => setSenha(event.target.value) }/>
-                </label>
-                <label>
-                    Confirmação de Senha
-                    <Input type="password" onChange={ (event) => verificaSenha(event) }/> 
-                </label>
-                <span>{verifSenha}</span>
+                <Input label="Nome" type="text" onChange={ (event) => validaNome(event) }/>
+                <Input label="E-mail" type="email" onChange={ (event) => validaEmail(event) }/>
+                <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
+                <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
+                <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
-            <Button type="button" onClick={onClick}>Salvar</Button>
+            <Button destiny={''} type='submit' onClick={onClick}>Salvar</Button>
         </div>
     );
 };

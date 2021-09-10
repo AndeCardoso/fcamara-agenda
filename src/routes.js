@@ -1,20 +1,19 @@
-import { Route, Router, Switch } from 'react-router';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import PageLogin from './pages/login';
 import PageCadastro from './pages/cadastro';
 import PageAgenda from './pages/agenda';
 import PageHome from './pages/home';
 import NotFound from './pages/not-found';
-import { history } from './history';
 
 const Routes = () => {
     return (
-        <Router history={ history }>
+        <Router>
             <Switch>
                 <Route component = { PageLogin } path="/" exact />
                 <Route component = { PageCadastro } path="/cadastro" />
                 <Route component = { PageHome } path="/home" />
                 <Route component = { PageAgenda } path="/agenda" />
-                <Route component = { NotFound } path="/not-found" />
+                <Route component = { NotFound } path="*" />
             </Switch>
         </Router>
     )
