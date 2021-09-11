@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
+import { useHistory } from 'react-router-dom';
+import api from '../../services/api'
 import Input from '../dumb/input';
 import Button from '../dumb/button';
 import Alert from '../dumb/alert';
-import api from '../../services/api'
 import { dbValidationLogin } from '../../services/dbValidations';
+import isLogged from '../../services/isLogged'
+
 import './style.css';
 
 const Login = () => {
@@ -12,6 +15,14 @@ const Login = () => {
     
     const [destiny, setDestiny] = useState('');
     const [alerta, setAlerta] = useState({ type: '', msg:'' });
+
+    let history = useHistory();
+
+    useEffect(()  =>  {
+        if(isLogged) {
+            history.push('/agenda');
+        }
+    }, []);
 
     const validaEmail = (event) => {
         const value = event.target.value;
@@ -60,16 +71,14 @@ const Login = () => {
 
             const response = await api.post('/user/signin', data);
             const token = response.data.token;
-            console.log(response)
             
             if ( token) {
-                localStorage.setItem('login-token', token);
+                sessionStorage.setItem('login-token', token);
                 setAlerta([]);
-                setDestiny('/home')
+                setDestiny('/main');
 
             } else {
                 setAlerta(dbValidationLogin(response)); 
-                
             }
         };
     };
@@ -81,7 +90,7 @@ const Login = () => {
             <div className="wrapper-login">
                 <Input label="E-mail" type="email" onChange={event => validaEmail(event)} />
                 <Input label="Senha" type="password" onChange={event => validaSenha(event)} />
-                <Button destiny={''} type="submit" onClick={onClick}>Entrar</Button>
+                <Button destiny={'/agenda'} type="commom" onClick={onClick}>Entrar</Button>
             </div>
         </div>
     );
