@@ -1,20 +1,33 @@
 import { useState, useEffect } from 'react';
+import { useLogged } from '../../context/auth';
+import { dbValidationRegister } from '../../services/dbValidations';
+import Cookies from 'js-cookie';
 import api from '../../services/api';
 import Button from '../dumb/button';
 import Input from '../dumb/input';
 import Alert from '../dumb/alert';
 
 import './style.css';
-import { dbValidationRegister } from '../../services/dbValidations';
 
 const Cadastro = () => {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [verifSenha, setVerifSenha] = useState('');
+    const { logged, setLogged } = useLogged();
 
     const [alertaSenha, setAlertaSenha] = useState({type: '', msg: ''});
     const [alerta, setAlerta] = useState({type: '', msg: ''});
+    const token = Cookies.get("token");
+
+    useEffect( async () => {
+        if (logged){
+            api.defaults.headers.token =  token ;
+            const response = await api.get('/user/me');
+            setNome(response.data.name);
+            setEmail(response.data.email);        
+        }
+    }, [])
 
     //state senha listener
     useEffect(() => {
@@ -83,7 +96,7 @@ const Cadastro = () => {
         }
     };
 
-    const onClick = async () => {
+    const onRegister = async () => {
 
         const data = {
             name: nome,
@@ -106,19 +119,53 @@ const Cadastro = () => {
             }
         }
     };
+    
+    const onUpdate = async () => {
+        const data = {
+            name: nome,
+            email: email,
+            password: senha
+        }
+        if (!nome || !email || !senha) {
+            setAlerta({
+                type: 'error',
+                msg: 'Preencha todos os campos!'
+            })
+        } else {
+            const response = await api.put('/user/signup', data);
+
+            if ( response.data.token) {
+                Cookies.set('token', response.data.token)
+                setLogged(true);
+            } else {
+                setAlerta(dbValidationRegister(response));
+            }
+        }
+    };
+
+    const onDelete = async () => {
+        alert("vai excluir o usuario!")
+    }
 
     return (
         <div className="wrapper-cadastro">
             <h1>Cadastro</h1>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="form-cadastro">
-                <Input label="Nome" type="text" onChange={ (event) => validaNome(event) }/>
-                <Input label="E-mail" type="email" onChange={ (event) => validaEmail(event) }/>
+                <Input label="Nome" type="text" value={nome} onChange={ (event) => validaNome(event) }/>
+                <Input label="E-mail" type="email" value={email} onChange={ (event) => validaEmail(event) }/>
                 <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
                 <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
-            <Button destiny={''} type='submit' onClick={onClick}>Salvar</Button>
+            {logged ? (
+                    <div>
+                        <Button destiny={''} type='commom' onClick={onUpdate}>Atualizar</Button>
+                        <Button destiny={''} type='warning' onClick={onDelete}>Deletar Usuario</Button>
+                    </div>
+                ) : (
+                    <Button destiny={''} type='commom' onClick={onRegister}>Cadastrar</Button>
+            )}
         </div>
     );
 };

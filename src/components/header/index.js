@@ -7,12 +7,13 @@ import Button from "../dumb/button";
 const Header = () => {
     const [userName, setUserName] = useState();
     const { logged, setLogged } = useLogged();
+    const token = Cookies.get('token');
 
     useEffect( async () => {
         if (logged) {
-            const token = {params: Cookies.get('token')};
-            const response = await api.get('/user/me', token);
-            console.log(response);
+            api.defaults.headers.token =  token ;
+            const response = await api.get('/user/me');
+            setUserName(response.data.name)
         }
     }, [logged])
 
@@ -25,7 +26,8 @@ const Header = () => {
         <div>
             { logged ? (
                 <div>
-                    <h2>{userName}</h2>
+                    <h2>Seja bem vindo {userName}!</h2>
+                    <Button type='commom' destiny='/cadastro'>Editar Cadastro</Button>
                     <Button type='commom' destiny='/' onClick={onClick}>Logout</Button>
                 </div>
             ) : (

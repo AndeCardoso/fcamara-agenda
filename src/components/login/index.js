@@ -19,7 +19,8 @@ const Login = () => {
     let history = useHistory();
 
     useEffect(()  =>  {
-        if(logged) {
+        if(Cookies.get('token')) {
+            setLogged(true);
             history.push('/agenda');
         }
     }, []);

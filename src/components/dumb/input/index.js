@@ -1,6 +1,6 @@
 import './style.css';
 
-const Input = ({ onChange, type, label, name }) => {
+const Input = ({ onChange, type, label, name, value }) => {
     return (
         <label>
             {label}
@@ -8,6 +8,7 @@ const Input = ({ onChange, type, label, name }) => {
             type={type}
             name={name}
             onChange={onChange}
+            value={value}
             />
         </label>
     );
