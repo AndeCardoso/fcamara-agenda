@@ -100,7 +100,7 @@ const Cadastro = () => {
             const response = await api.post('/user/signup', data);
 
             if ( response.data.token) {
-                localStorage.setItem('cadastro-token', response.data.token)
+                localStorage.setItem('token-login', response.data.token)
             } else {
                 setAlerta(dbValidationRegister(response));
             }

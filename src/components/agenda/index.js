@@ -3,8 +3,9 @@ import { useHistory } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import isLogged from '../../services/isLogged';
+import Cookies from 'js-cookie';
 import Button from '../dumb/button'
+import { useLogged } from '../../context/auth';
 import api from '../../services/api';
 
 import './style.css';
@@ -12,12 +13,14 @@ import './style.css';
 const Agenda = () => {
     const [events, setEvents] = useState([]);
     const [marcar, setMarcar] = useState(undefined);
-    const daysReserved = [];
-    const token = sessionStorage.getItem('token-login');
+    const { logged, setLogged } = useLogged();
+    const token = Cookies.get('token');
+
     let history = useHistory();
+    const daysReserved = [];
 
     useEffect(()  =>  {
-      if(isLogged) {
+      if(logged) {
         loadAgenda();
       } else {
         history.push('/');
@@ -25,8 +28,8 @@ const Agenda = () => {
     }, []);
 
     const loadAgenda = async () => {
-      if (sessionStorage.getItem('login-token')) {
-        const unidade = { unit: 'Santos' };
+      if (token) {
+        const unidade = { unit: 'São Paulo' };
         api.defaults.headers.authorization = token;
         const response = await api.get('/appoint', unidade );
         setEvents(response);
@@ -41,15 +44,6 @@ const Agenda = () => {
       const date = value.dateStr;
 
       daysReserved.push({ day: date });
-      console.log(daysReserved)
-
-        // setDate((prevValue) => ({ ...prevValue, value }));
-
-        // if (value.dayEl.dateStr == date.map) {
-        //     value.dayEl.style.backgroundColor = 'blue';
-        // } else {
-        //     return value.dayEl.style.backgroundColor = 'orange';
-        // }
     }
 
     return (
@@ -60,7 +54,6 @@ const Agenda = () => {
           events={events}
           initialView="dayGridMonth"
           dateClick={dateClick}
-          // event={marcar}
         />
       </div>
     )

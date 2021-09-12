@@ -1,25 +1,25 @@
-import { useState, useEffect  } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import api from '../../services/api'
+import Cookies from 'js-cookie';
+import api from '../../services/api';
 import Input from '../dumb/input';
+import { dbValidationLogin } from '../../services/dbValidations';
+import { useLogged } from '../../context/auth';
 import Button from '../dumb/button';
 import Alert from '../dumb/alert';
-import { dbValidationLogin } from '../../services/dbValidations';
-import isLogged from '../../services/isLogged'
 
 import './style.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    
-    const [destiny, setDestiny] = useState('');
-    const [alerta, setAlerta] = useState({ type: '', msg:'' });
+    const [alerta, setAlerta] = useState({ type: '', msg: '' });
+    const { logged, setLogged } = useLogged();
 
     let history = useHistory();
 
     useEffect(()  =>  {
-        if(isLogged) {
+        if(logged) {
             history.push('/agenda');
         }
     }, []);
@@ -27,17 +27,16 @@ const Login = () => {
     const validaEmail = (event) => {
         const value = event.target.value;
 
-        if ( value.length < 6 && value.length !== 0 ){
+        if ( value.includes("@") && value.includes(".com") ) {
+            setEmail(value);
+            setAlerta({});
+        } else {
             setAlerta({
                 type: 'error',
-                msg: 'A senha precisa de 6 caracteres!'
+                msg: 'Formato de E-mail invalido!'
             });
-            setEmail(value);
-        } else {
-            setAlerta({});
-            setEmail(value);
         }
-    };
+    }
 
     const validaSenha = (event) => {
         const value = event.target.value;
@@ -67,30 +66,28 @@ const Login = () => {
                 password: senha
             } 
 
-            console.log(data)
-
             const response = await api.post('/user/signin', data);
-            const token = response.data.token;
+            Cookies.set("token", response.data.token);
             
-            if ( token) {
-                sessionStorage.setItem('login-token', token);
+            if (Cookies.get("token")){
                 setAlerta([]);
-                setDestiny('/main');
-
+                setLogged(true);
+                history.push('/agenda');
             } else {
-                setAlerta(dbValidationLogin(response)); 
+                setAlerta(dbValidationLogin(response));
+                setLogged(false);
             }
         };
     };
     
     return (
-        <div className="wrapper-login">
+        <div className="wrapper">
             <h1>Login</h1>
             <Alert type={alerta.type}>{alerta.msg}</Alert>
             <div className="wrapper-login">
                 <Input label="E-mail" type="email" onChange={event => validaEmail(event)} />
                 <Input label="Senha" type="password" onChange={event => validaSenha(event)} />
-                <Button destiny={'/agenda'} type="commom" onClick={onClick}>Entrar</Button>
+                <Button type="commom" destiny='' onClick={onClick}>Entrar</Button>
             </div>
         </div>
     );

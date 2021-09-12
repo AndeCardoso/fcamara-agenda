@@ -5,24 +5,27 @@ import Cadastro from '../cadastro';
 import Agenda from '../agenda';
 import NotFound from '../../pages/not-found';
 import './style.css';
+import { AuthProvider } from '../../context/auth';
 
 
 const Home = () => {
 
     return (
-        <Router>
-            <div className='wrapper-home'>
-                <Header />
-                <main>
-                    <Switch>
-                        <Route component = { Login } path="/" exact />
-                        <Route component = { Cadastro } path="/cadastro" />
-                        <Route component = { Agenda } path="/agenda" />
-                        <Route component = { NotFound } path="*" />
-                    </Switch>
-                </main>
-            </div>
-        </Router>
+        <AuthProvider>
+            <Router>
+                <div className='wrapper-home'>
+                    <Header />
+                    <main>
+                        <Switch>
+                            <Route component = { Login } path="/" exact />
+                            <Route component = { Cadastro } path="/cadastro" />
+                            <Route component = { Agenda } path="/agenda" />
+                            <Route component = { NotFound } path="*" />
+                        </Switch>
+                    </main>
+                </div>
+            </Router>
+        </AuthProvider>
     )
 }
 
