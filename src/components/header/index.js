@@ -3,6 +3,7 @@ import { useLogged } from '../../context/auth';
 import Cookies from 'js-cookie';
 import api from '../../services/api';
 import Button from "../dumb/button";
+import './style.css';
 
 const Header = () => {
     const [userName, setUserName] = useState();
@@ -23,11 +24,11 @@ const Header = () => {
     }
 
     return (
-        <div>
+        <header>
             { logged ? (
                 <div>
                     <h2>Seja bem vindo {userName}!</h2>
-                    <Button type='commom' destiny='/cadastro'>Editar Cadastro</Button>
+                    <Button type='commom' destiny='/updatecadastro'>Editar Cadastro</Button>
                     <Button type='commom' destiny='/' onClick={onClick}>Logout</Button>
                 </div>
             ) : (
@@ -36,7 +37,7 @@ const Header = () => {
                 <Button type='button' destiny='/' >Login</Button>
             </div>
             )}
-        </div>
+        </header>
     )
 }
 

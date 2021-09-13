@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { useLogged } from '../../context/auth';
-import { dbValidationRegister } from '../../services/dbValidations';
-import api from '../../services/api';
+import { useLogged } from '../../../context/auth';
+import { dbValidationRegister } from '../../../services/dbValidations';
+import api from '../../../services/api';
 
-import Button from '../dumb/button';
-import Input from '../dumb/input';
-import Alert from '../dumb/alert';
+import Button from '../../dumb/button';
+import Input from '../../dumb/input';
+import Alert from '../../dumb/alert';
 
 import './style.css';
 
-const Cadastro = () => {
+const UpdateCadastro = () => {
     const { logged, setLogged } = useLogged();
     const token = Cookies.get("token");
 
@@ -34,6 +34,7 @@ const Cadastro = () => {
             setEmail(response.data.email);          
         } else {
             setLogged(false)
+            history.push('/')
         }
     }, [])
 
@@ -103,33 +104,38 @@ const Cadastro = () => {
             setAlertaSenha({})
         }
     };
-
-    const onClick = async () => {
-
+    
+    const onUpdate = async () => {
         const data = {
             name: nome,
             email: email,
             password: senha
         }
-
         if (!nome || !email || !senha) {
             setAlerta({
                 type: 'error',
                 msg: 'Preencha todos os campos!'
             })
         } else {
-            
-            const response = await api.post('/user/signup', data);
-
+            const data = {
+                name: nome,
+                email: email,
+                password: senha
+            }
+            api.defaults.headers.token =  token ;
+            const response = await api.put('/user/signup', data);
             if ( response.data.token) {
-                Cookies.set('token', response.data.token);
-                setLogged(true);
+                history.push('/agenda');
             } else {
                 setAlerta(dbValidationRegister(response));
             }
         }
     };
-    
+
+    const onDelete = async () => {
+        alert("vai excluir o usuario!")
+    }
+
     return (
         <div className="wrapper-cadastro">
             <h1>Cadastro</h1>
@@ -141,9 +147,10 @@ const Cadastro = () => {
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
                 <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
-            <Button destiny={''} type='commom' onClick={onClick}>Cadastrar</Button>
+            <Button destiny={''} type='commom' onClick={onUpdate}>Atualizar</Button>
+            <Button destiny={''} type='warning' onClick={onDelete}>Deletar Usuario</Button>
         </div>
     );
 };
 
-export default Cadastro;
+export default UpdateCadastro;

@@ -1,5 +1,3 @@
-.wrapper-agenda {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.agenda {
+    width: 875px;
 }

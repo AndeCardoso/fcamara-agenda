@@ -22,6 +22,8 @@ const Login = () => {
         if(Cookies.get('token')) {
             setLogged(true);
             history.push('/agenda');
+        } else {
+            setLogged(false);
         }
     }, []);
 
@@ -66,11 +68,11 @@ const Login = () => {
                 email: email,
                 password: senha
             } 
-
             const response = await api.post('/user/signin', data);
+            console.log(response)
             Cookies.set("token", response.data.token);
             
-            if (Cookies.get("token")){
+            if (Cookies.get("token") !== undefined){
                 setAlerta([]);
                 setLogged(true);
                 history.push('/agenda');
