@@ -22,19 +22,8 @@ const Agenda = () => {
     const { logged, setLogged } = useLogged();
     const calendarRef = useRef(null);
     const token = Cookies.get('token');
-    // const events = [{
-    //   allDay: 'true',
-    //   title: 'SP',
-    //   date: '2021-09-01T03:00:00.000Z',
-    //   id: '613e46ad70bd72ba3d3c02cf'
-    // },
-    // {allDay: 'true',
-    // title: 'SP',
-    // date: '2021-09-10T03:00:00.000Z',
-    // id: '613e46ad70bd72ba3d3c02ch'}]
 
     let history = useHistory();
-    const daysReserved = [];
 
     useEffect(()  =>  {
       if(logged) {
@@ -49,13 +38,13 @@ const Agenda = () => {
         const local = { unit: unit };
         api.defaults.headers.authorization = token;
         const response = await api.get('/appoint', local );
-        let eventos = response.data.appoints.map(function(evento){return evento});
-        setEvents([{
-          title: eventos.unit,
-          date: eventos.ap_date,
-          id: eventos._id
-        }]);
-        console.log(response)
+        response.data.appoints.map((appoint) => {return setEvents(events => [...events, {
+          allDay: true,
+          title: appoint.unit,
+          date: appoint.ap_date,
+          id: appoint._id
+        }])});
+        console.log(events)
       }
     };
 
@@ -91,14 +80,6 @@ const Agenda = () => {
       const unidade = { unit: unit };
       api.defaults.headers.authorization = token;
       const response = api.get("/appoint", unidade)
-      // let evento = response.data.appoints.map(function(evento){return evento});
-
-      // setEvents([{
-      //   title: local,
-      //   date: dia,
-      //   id: id
-      // }])
-      return response;
     }
 
     return (
