@@ -1,6 +1,16 @@
-const Input = ({ type, onChange }) => {
+import './style.css';
+
+const Input = ({ onChange, type, label, name, value }) => {
     return (
-        <input type={type} onChange={onChange} />
+        <label>
+            {label}
+            <input
+            type={type}
+            name={name}
+            onChange={onChange}
+            value={value}
+            />
+        </label>
     );
 };
 
