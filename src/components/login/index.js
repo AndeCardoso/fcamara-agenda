@@ -5,7 +5,7 @@ import api from '../../services/api';
 import Input from '../dumb/input';
 import { dbValidationLogin } from '../../services/dbValidations';
 import { useLogged } from '../../context/auth';
-import Button from '../dumb/button';
+import { Button } from '../dumb/button';
 import Alert from '../dumb/alert';
 
 import './style.css';
@@ -69,7 +69,6 @@ const Login = () => {
                 password: senha
             } 
             const response = await api.post('/user/signin', data);
-            console.log(response)
             Cookies.set("token", response.data.token);
             
             if (Cookies.get("token") !== undefined){
@@ -86,11 +85,11 @@ const Login = () => {
     return (
         <div className="wrapper">
             <h1>Login</h1>
-            <Alert type={alerta.type}>{alerta.msg}</Alert>
+            <Alert className="alert" type={alerta.type}>{alerta.msg}</Alert>
             <div className="wrapper-login">
                 <Input label="E-mail" type="email" onChange={event => validaEmail(event)} />
                 <Input label="Senha" type="password" onChange={event => validaSenha(event)} />
-                <Button type="commom" destiny='' onClick={onClick}>Entrar</Button>
+                <Button type="commom" onClick={onClick}>Entrar</Button>
             </div>
         </div>
     );

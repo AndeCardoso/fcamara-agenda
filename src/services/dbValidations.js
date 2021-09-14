@@ -31,7 +31,7 @@ export const dbValidationLogin = ( response ) => {
 }
 
 export const dbValidationRegister = ( response ) => {
-    const status = response.data.error;
+    const status = response.data.status;
     console.log(status)
     let alerta = {type: '', msg: ''};
     switch (status) {

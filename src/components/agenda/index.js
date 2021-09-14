@@ -17,7 +17,7 @@ const Agenda = () => {
       date: '',
       id: ''
     }]);
-    const [unit, setUnit] = useState('São Paulo');
+    const [unit, setUnit] = useState('Santos');
     const [alerta, setAlerta] = useState({ type: '', msg: '' });
     const { logged, setLogged } = useLogged();
     const calendarRef = useRef(null);
@@ -36,7 +36,7 @@ const Agenda = () => {
     const loadAgenda = async () => {
       if (token) {
         const local = { unit: unit };
-        api.defaults.headers.authorization = token;
+        api.defaults.headers.token = token;
         const response = await api.get('/appoint', local );
         response.data.appoints.map((appoint) => {return setEvents(events => [...events, {
           allDay: true,
@@ -44,7 +44,6 @@ const Agenda = () => {
           date: appoint.ap_date,
           id: appoint._id
         }])});
-        console.log(events)
       }
     };
 
@@ -76,18 +75,12 @@ const Agenda = () => {
       });
     };
     
-    const handleDatesSet = async () => {
-      const unidade = { unit: unit };
-      api.defaults.headers.authorization = token;
-      const response = api.get("/appoint", unidade)
-    }
-
     return (
       <div className="agenda">
         <Alerta type={alerta.type}>{alerta.msg}</Alerta>
         <select value={unit} onChange={event => setUnit(event.target.value)} >
-          <option value="São Paulo">São Paulo</option>
           <option value="Santos">Santos</option>
+          <option value="São Paulo">São Paulo</option>
         </select>
 
         <FullCalendar
@@ -100,7 +93,6 @@ const Agenda = () => {
           locale="pt-br"
           initialView="dayGridMonth"
           eventClick={(event) => handleEventRemove(event)}
-          datesSet={(date) => handleDatesSet(date)}
           dateClick={(event) => onEventAdded(event)}
         />
       </div>

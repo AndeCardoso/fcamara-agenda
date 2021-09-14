@@ -6,7 +6,7 @@ import { useLogged } from '../../../context/auth';
 import { dbValidationRegister } from '../../../services/dbValidations';
 import api from '../../../services/api';
 
-import Button from '../../dumb/button';
+import { Button } from '../../dumb/button';
 import Input from '../../dumb/input';
 import Alert from '../../dumb/alert';
 
@@ -106,12 +106,8 @@ const UpdateCadastro = () => {
     };
     
     const onUpdate = async () => {
-        const data = {
-            name: nome,
-            email: email,
-            password: senha
-        }
         if (!nome || !email || !senha) {
+            alert("aqui")
             setAlerta({
                 type: 'error',
                 msg: 'Preencha todos os campos!'
@@ -122,8 +118,10 @@ const UpdateCadastro = () => {
                 email: email,
                 password: senha
             }
-            api.defaults.headers.token =  token ;
-            const response = await api.put('/user/signup', data);
+            api.defaults.headers.authorization =  token ;
+            const response = await api.put('/user/me', data);
+            console.log('aqui')
+            console.log(response)
             if ( response.data.token) {
                 history.push('/agenda');
             } else {
@@ -133,12 +131,13 @@ const UpdateCadastro = () => {
     };
 
     const onDelete = async () => {
-        alert("vai excluir o usuario!")
+        api.defaults.headers.authorization =  token ;
+        const response = await api.delete('/user/me');
     }
 
     return (
         <div className="wrapper-cadastro">
-            <h1>Cadastro</h1>
+            <h1>Atualizar Cadastro</h1>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="form-cadastro">
                 <Input label="Nome" type="text" value={nome} onChange={ (event) => validaNome(event) }/>
@@ -147,8 +146,8 @@ const UpdateCadastro = () => {
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
                 <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
-            <Button destiny={''} type='commom' onClick={onUpdate}>Atualizar</Button>
-            <Button destiny={''} type='warning' onClick={onDelete}>Deletar Usuario</Button>
+            <Button type='commom' onClick={onUpdate}>Atualizar</Button>
+            <Button type='warning' onClick={onDelete}>Deletar Usuario</Button>
         </div>
     );
 };

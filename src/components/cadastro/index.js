@@ -6,7 +6,7 @@ import { useLogged } from '../../context/auth';
 import { dbValidationRegister } from '../../services/dbValidations';
 import api from '../../services/api';
 
-import Button from '../dumb/button';
+import { Button } from '../dumb/button';
 import Input from '../dumb/input';
 import Alert from '../dumb/alert';
 
@@ -124,6 +124,7 @@ const Cadastro = () => {
             if ( response.data.token) {
                 Cookies.set('token', response.data.token);
                 setLogged(true);
+                history.push('/agenda');
             } else {
                 setAlerta(dbValidationRegister(response));
             }
@@ -135,13 +136,13 @@ const Cadastro = () => {
             <h1>Cadastro</h1>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="form-cadastro">
-                <Input label="Nome" type="text" value={nome} onChange={ (event) => validaNome(event) }/>
-                <Input label="E-mail" type="email" value={email} onChange={ (event) => validaEmail(event) }/>
+                <Input label="Nome" type="text" onChange={ (event) => validaNome(event) }/>
+                <Input label="E-mail" type="email" onChange={ (event) => validaEmail(event) }/>
                 <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
                 <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
-            <Button destiny={''} type='commom' onClick={onClick}>Cadastrar</Button>
+            <Button type='commom' onClick={onClick}>Cadastrar</Button>
         </div>
     );
 };
