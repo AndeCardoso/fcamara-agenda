@@ -2,8 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-self: flex-start;
-    background-color: orange;
 }
 
 .wrapper-login {
@@ -11,8 +9,7 @@
     flex-direction: column;
 }
 
-.alert {
-    background-color: red;
-    color: #fff;
-    box-shadow: red;
+.login-btns {
+    display: flex;
+    flex-direction: column;
 }

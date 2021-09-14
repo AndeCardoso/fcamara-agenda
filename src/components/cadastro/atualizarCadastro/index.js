@@ -6,7 +6,7 @@ import { useLogged } from '../../../context/auth';
 import { dbValidationRegister } from '../../../services/dbValidations';
 import api from '../../../services/api';
 
-import { Button } from '../../dumb/button';
+import { Button, LinkButton } from '../../dumb/button';
 import Input from '../../dumb/input';
 import Alert from '../../dumb/alert';
 
@@ -118,13 +118,12 @@ const UpdateCadastro = () => {
                 email: email,
                 password: senha
             }
-            api.defaults.headers.authorization =  token ;
+            api.defaults.headers.authorization = token ;
             const response = await api.put('/user/me', data);
-            console.log('aqui')
-            console.log(response)
-            if ( response.data.token) {
+            if ( response.data) {
                 history.push('/agenda');
             } else {
+                console.log(response)
                 setAlerta(dbValidationRegister(response));
             }
         }
@@ -137,17 +136,20 @@ const UpdateCadastro = () => {
 
     return (
         <div className="wrapper-cadastro">
-            <h1>Atualizar Cadastro</h1>
+            <h2>Atualizar</h2>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
-            <div className="form-cadastro">
+            <div className="update-form">
                 <Input label="Nome" type="text" value={nome} onChange={ (event) => validaNome(event) }/>
                 <Input label="E-mail" type="email" value={email} onChange={ (event) => validaEmail(event) }/>
                 <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
                 <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
-            <Button type='commom' onClick={onUpdate}>Atualizar</Button>
-            <Button type='warning' onClick={onDelete}>Deletar Usuario</Button>
+            <div className="update-btns" >
+                <Button type='button primary' onClick={onUpdate}>Atualizar</Button>
+                <Button type='button secondary' onClick={onDelete}>Deletar</Button>
+                <LinkButton type='button tertiary' destiny='/agenda'>Agendar</LinkButton>
+            </div>
         </div>
     );
 };

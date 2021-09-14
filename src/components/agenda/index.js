@@ -1,25 +1,32 @@
 import { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import Cookies from 'js-cookie';
+
+import { Button, LinkButton } from "../dumb/button";
+import Select from '../dumb/select';
 import Alerta from '../dumb/alert'
+
 import { useLogged } from '../../context/auth';
 import api from '../../services/api';
 
 import './style.css';
 
 const Agenda = () => {
+    const [unit, setUnit] = useState('Santos');
     const [events, setEvents] = useState([{
       allDay: true,
       title: '',
       date: '',
       id: ''
     }]);
-    const [unit, setUnit] = useState('Santos');
+
     const [alerta, setAlerta] = useState({ type: '', msg: '' });
     const { logged, setLogged } = useLogged();
+
     const calendarRef = useRef(null);
     const token = Cookies.get('token');
 
@@ -48,9 +55,22 @@ const Agenda = () => {
     };
 
     const handleEventRemove = async (data) => {
-      console.log(data)
+      const id = data.event._def.publicId;
+      console.log(id)
       api.defaults.headers.token = token;
-      const response = await api.delete("/appoint", data);   
+      const response = await api.delete("/appoint/"+id);
+      if (response.data.message) {
+        setAlerta({
+          type: "sucess",
+          msg: "Agendamento cancelado!"
+        });
+        window.location.reload();
+      } else {
+        setAlerta({
+          type: "error",
+          msg: "Algo deu errado!"
+        });
+      }
     }
 
     const onEventAdded = async (event) => {
@@ -74,27 +94,36 @@ const Agenda = () => {
           id: response.data.appoint._id
       });
     };
+
+    const onLogout = () => {
+      Cookies.remove('token');
+      setLogged(false);
+      history.push('/')
+    }
     
     return (
-      <div className="agenda">
-        <Alerta type={alerta.type}>{alerta.msg}</Alerta>
-        <select value={unit} onChange={event => setUnit(event.target.value)} >
-          <option value="Santos">Santos</option>
-          <option value="São Paulo">São Paulo</option>
-        </select>
-
+      <div className="wrapper-agenda">
+        <div className="appoint-top">
+          <Alerta type={alerta.type}>{alerta.msg}</Alerta>
+          <Select label="Unidade:" value={unit} onChange={event => setUnit(event.target.value)} />
+        </div>
         <FullCalendar
           plugins={[ dayGridPlugin, interactionPlugin ]}
           ref={calendarRef}
           events={{events}}
           selectable={true}
           weekends={false}
-          editable={(event) => handleEventRemove(event)}
+          // headerToolbar=
           locale="pt-br"
           initialView="dayGridMonth"
           eventClick={(event) => handleEventRemove(event)}
           dateClick={(event) => onEventAdded(event)}
+          eventColor={'#36357E'}
         />
+        <div className="appoint-btns">
+          <LinkButton type='button primary' destiny='/updatecadastro'>Editar Cadastro</LinkButton>
+          <Button type='button secondary' onClick={onLogout}>Sair</Button>
+        </div>
       </div>
     )
 };

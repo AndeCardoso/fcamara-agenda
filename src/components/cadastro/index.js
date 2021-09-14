@@ -6,7 +6,7 @@ import { useLogged } from '../../context/auth';
 import { dbValidationRegister } from '../../services/dbValidations';
 import api from '../../services/api';
 
-import { Button } from '../dumb/button';
+import { Button, LinkButton } from '../dumb/button';
 import Input from '../dumb/input';
 import Alert from '../dumb/alert';
 
@@ -142,7 +142,10 @@ const Cadastro = () => {
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
                 <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
-            <Button type='commom' onClick={onClick}>Cadastrar</Button>
+            <div>
+                <Button type='button primary' onClick={onClick}>Cadastrar</Button>
+                <LinkButton type='button' destiny='/' >Login</LinkButton>
+            </div>
         </div>
     );
 };

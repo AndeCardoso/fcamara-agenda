@@ -3,7 +3,7 @@ import './style.css';
 const Input = ({ onChange, type, label, name, value }) => {
     return (
         <label>
-            {label}
+            <span>{label}</span>
             <input
             type={type}
             name={name}

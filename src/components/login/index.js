@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import api from '../../services/api';
+
+import { Button, LinkButton } from '../dumb/button';
 import Input from '../dumb/input';
-import { dbValidationLogin } from '../../services/dbValidations';
-import { useLogged } from '../../context/auth';
-import { Button } from '../dumb/button';
 import Alert from '../dumb/alert';
+
+import api from '../../services/api';
+import { useLogged } from '../../context/auth';
+import { dbValidationLogin } from '../../services/dbValidations';
 
 import './style.css';
 
@@ -14,6 +16,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [alerta, setAlerta] = useState({ type: '', msg: '' });
+
     const { logged, setLogged } = useLogged();
 
     let history = useHistory();
@@ -84,12 +87,18 @@ const Login = () => {
     
     return (
         <div className="wrapper">
-            <h1>Login</h1>
+            <p>
+            Olá Sanque Laranja.<br/>
+            Agende seu retorno ao escritório, sem burocracia e sem aglomeração!
+            </p>
             <Alert className="alert" type={alerta.type}>{alerta.msg}</Alert>
             <div className="wrapper-login">
                 <Input label="E-mail" type="email" onChange={event => validaEmail(event)} />
                 <Input label="Senha" type="password" onChange={event => validaSenha(event)} />
-                <Button type="commom" onClick={onClick}>Entrar</Button>
+            </div>
+            <div className="login-btns">
+                <Button type="button primary" onClick={onClick}>Entrar</Button>
+                <LinkButton type="button secondary" destiny='/cadastro' >Cadastrar</LinkButton>
             </div>
         </div>
     );

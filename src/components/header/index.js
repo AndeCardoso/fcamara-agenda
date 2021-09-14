@@ -1,12 +1,14 @@
 import { memo, useEffect, useState } from 'react';
-import { useLogged } from '../../context/auth';
 import Cookies from 'js-cookie';
+
+import { useLogged } from '../../context/auth';
 import api from '../../services/api';
-import { Button, LinkButton } from "../dumb/button";
+
 import './style.css';
 
 const Header = () => {
     const [userName, setUserName] = useState();
+    
     const { logged, setLogged } = useLogged();
     const token = Cookies.get('token');
 
@@ -18,24 +20,13 @@ const Header = () => {
         }
     }, [logged])
 
-    const onClick = () => {
-        Cookies.remove('token');
-        setLogged(false);
-    }
-
     return (
         <header>
             { logged ? (
-                <div>
-                    <h2>Seja bem vindo {userName}!</h2>
-                    <LinkButton type='commom' destiny='/updatecadastro'>Editar Cadastro</LinkButton>
-                    <Button type='commom' onClick={onClick}>Logout</Button>
-                </div>
+                <h2>Olá {userName}!</h2>
             ) : (
-            <div>
-                <LinkButton type='button' destiny='/cadastro' >Cadastrar Novo Usuario</LinkButton>
-                <LinkButton type='button' destiny='/' >Login</LinkButton>
-            </div>
+                <>
+                </>
             )}
         </header>
     )
