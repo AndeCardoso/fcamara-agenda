@@ -121,6 +121,7 @@ const UpdateCadastro = () => {
             api.defaults.headers.authorization = token ;
             const response = await api.put('/user/me', data);
             if ( response.data) {
+                window.location.reload();
                 history.push('/agenda');
             } else {
                 console.log(response)
@@ -136,7 +137,7 @@ const UpdateCadastro = () => {
 
     return (
         <div className="wrapper-cadastro">
-            <h2>Atualizar</h2>
+            <h1>Atualizar</h1>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="update-form">
                 <Input label="Nome" type="text" value={nome} onChange={ (event) => validaNome(event) }/>

@@ -23,7 +23,9 @@ const Header = () => {
     return (
         <header>
             { logged ? (
-                <h2>Olá {userName}!</h2>
+                <div className="user">
+                    <h2>Olá {userName}!</h2>
+                </div>
             ) : (
                 <>
                 </>

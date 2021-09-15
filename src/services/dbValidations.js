@@ -44,7 +44,7 @@ export const dbValidationRegister = ( response ) => {
         case '301':
             alerta = {
                 type: 'error',
-                msg: 'Formato de e-mail invalido!'
+                msg: 'Formato de e-mail inválido!'
             };
             return alerta;
         case '302':

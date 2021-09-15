@@ -132,19 +132,19 @@ const Cadastro = () => {
     };
     
     return (
-        <div className="wrapper-cadastro">
+        <div className="wrapper-register">
             <h1>Cadastro</h1>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
-            <div className="form-cadastro">
+            <div className="register-form">
                 <Input label="Nome" type="text" onChange={ (event) => validaNome(event) }/>
                 <Input label="E-mail" type="email" onChange={ (event) => validaEmail(event) }/>
                 <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
-                <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
-                <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
+                <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/>  
             </div>
-            <div>
+            <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
+            <div className="register-btns">
                 <Button type='button primary' onClick={onClick}>Cadastrar</Button>
-                <LinkButton type='button' destiny='/' >Login</LinkButton>
+                <LinkButton type='button secondary' destiny='/' >Login</LinkButton>
             </div>
         </div>
     );

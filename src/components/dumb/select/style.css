@@ -1,7 +1,12 @@
 .label-select {
     flex-direction: row;
-    align-self: flex-start;
+    align-self: center;
+    justify-content: flex-start;
     margin-bottom: 15px;
+}
+
+.label-select span {
+    margin-right: 20px;
 }
 
 select {
@@ -17,8 +22,4 @@ select option {
     border: none;
     border-radius: 5px;
     text-align: center;
-}
-
-span {
-    margin-right: 15px;
 }

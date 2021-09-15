@@ -10,6 +10,7 @@ import api from '../../services/api';
 import { useLogged } from '../../context/auth';
 import { dbValidationLogin } from '../../services/dbValidations';
 
+import Logo from './logo.png';
 import './style.css';
 
 const Login = () => {
@@ -37,6 +38,9 @@ const Login = () => {
             setEmail(value);
             setAlerta({});
         } else {
+            if (!value) {
+                setAlerta({});
+            }
             setAlerta({
                 type: 'error',
                 msg: 'Formato de E-mail invalido!'
@@ -87,10 +91,14 @@ const Login = () => {
     
     return (
         <div className="wrapper">
-            <p>
-            Olá Sanque Laranja.<br/>
-            Agende seu retorno ao escritório, sem burocracia e sem aglomeração!
-            </p>
+            <div className="login-top">
+                <img src={Logo} />
+                <p>
+                Olá Sanque Laranja.<br/>
+                Agende seu retorno ao escritório,
+                sem burocracia e sem aglomeração!
+                </p>
+            </div>
             <Alert className="alert" type={alerta.type}>{alerta.msg}</Alert>
             <div className="wrapper-login">
                 <Input label="E-mail" type="email" onChange={event => validaEmail(event)} />

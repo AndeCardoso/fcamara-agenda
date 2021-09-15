@@ -1,7 +1,30 @@
+
 .sucess{
-    color:green;
+    display: flex;
+    align-self: center;
+    font-size: 20px;
+    font-style: italic;
+    background-color: #ffffff;
+    opacity: 80%;
+    color: #00ff00;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 38px;
+    position: absolute;
+    box-shadow: rgb(255, 255, 255);
 }
 
 .error {
-    color: red;
+    display: flex;
+    align-self: center;
+    font-size: 20px;
+    font-style: italic;
+    background-color: #ffffff;
+    opacity: 80%;
+    color: #ff0000;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 38px;
+    position: absolute;
+    box-shadow: rgb(255, 255, 255);
 }

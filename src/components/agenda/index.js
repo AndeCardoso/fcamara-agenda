@@ -103,8 +103,9 @@ const Agenda = () => {
     
     return (
       <div className="wrapper-agenda">
+        <h1>AGENDAMENTO</h1>
+        <Alerta type={alerta.type}>{alerta.msg}</Alerta>
         <div className="appoint-top">
-          <Alerta type={alerta.type}>{alerta.msg}</Alerta>
           <Select label="Unidade:" value={unit} onChange={event => setUnit(event.target.value)} />
         </div>
         <FullCalendar
@@ -113,7 +114,6 @@ const Agenda = () => {
           events={{events}}
           selectable={true}
           weekends={false}
-          // headerToolbar=
           locale="pt-br"
           initialView="dayGridMonth"
           eventClick={(event) => handleEventRemove(event)}
