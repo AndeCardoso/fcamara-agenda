@@ -80,11 +80,16 @@ const Agenda = () => {
       }
       api.defaults.headers.token = token;
       const response = await api.post("/appoint", data)
-      if (response) {
+      if (!response.data.error) {
         setAlerta({
-          type: "error",
-          msg: "Agendamento repetido!"
+          type: "sucess",
+          msg: "Agendado com sucesso!"
         })
+      } else {
+        setAlerta({
+          type: 'error',
+          msg: response.data.error
+        });
       }
       let calendarApi = calendarRef.current.getApi();
       calendarApi.addEvent({
@@ -120,6 +125,7 @@ const Agenda = () => {
           dateClick={(event) => onEventAdded(event)}
           eventColor={'#36357E'}
         />
+        <p>Basta clicar na data desejada</p>
         <div className="appoint-btns">
           <LinkButton type='button primary' destiny='/updatecadastro'>Editar Cadastro</LinkButton>
           <Button type='button secondary' onClick={onLogout}>Sair</Button>

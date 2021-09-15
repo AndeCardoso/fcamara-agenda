@@ -45,7 +45,7 @@ const Cadastro = () => {
     const validaEmail = (event) => {
         const value = event.target.value;
 
-        if ( value.includes("@") && value.includes(".") ) {
+        if ( value.includes("@") && value.includes(".com") ) {
             setEmail(value);
             setAlerta({});
         } else {
@@ -134,6 +134,7 @@ const Cadastro = () => {
     return (
         <div className="wrapper-register">
             <h1>Cadastro</h1>
+            <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="register-form">
                 <Input label="Nome" type="text" onChange={ (event) => validaNome(event) }/>
@@ -141,7 +142,6 @@ const Cadastro = () => {
                 <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/>  
             </div>
-            <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             <div className="register-btns">
                 <Button type='button primary' onClick={onClick}>Cadastrar</Button>
                 <LinkButton type='button secondary' destiny='/' >Login</LinkButton>

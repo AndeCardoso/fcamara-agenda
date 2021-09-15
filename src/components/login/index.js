@@ -12,6 +12,7 @@ import { dbValidationLogin } from '../../services/dbValidations';
 
 import Logo from './logo.png';
 import './style.css';
+import axios from 'axios';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -75,17 +76,32 @@ const Login = () => {
                 email: email,
                 password: senha
             } 
-            const response = await api.post('/user/signin', data);
-            Cookies.set("token", response.data.token);
-            
-            if (Cookies.get("token") !== undefined){
+            const response = await api.post('/user/signin', data)
+            .then(response => {
+                Cookies.set("token", response.data.token);
                 setAlerta([]);
                 setLogged(true);
                 history.push('/agenda');
-            } else {
-                setAlerta(dbValidationLogin(response));
-                setLogged(false);
-            }
+                
+            }).catch(errors => {
+                    setAlerta({
+                        type: 'error',
+                        msg: 'Erro!'
+                    });
+                    setLogged(false);
+            });
+            // if (Cookies.get("token") !== undefined){
+            //     setAlerta([]);
+            //     setLogged(true);
+            //     history.push('/agenda');
+            // } else {
+                
+            //     setAlerta({
+            //         type: 'error',
+            //         msg: response.data.error
+            //     });
+            //     setLogged(false);
+            // }
         };
     };
     

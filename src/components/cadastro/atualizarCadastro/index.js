@@ -46,7 +46,7 @@ const UpdateCadastro = () => {
     const validaEmail = (event) => {
         const value = event.target.value;
 
-        if ( value.includes("@") && value.includes(".") ) {
+        if ( value.includes("@") && value.includes(".com") ) {
             setEmail(value);
             setAlerta({});
         } else {
@@ -107,7 +107,6 @@ const UpdateCadastro = () => {
     
     const onUpdate = async () => {
         if (!nome || !email || !senha) {
-            alert("aqui")
             setAlerta({
                 type: 'error',
                 msg: 'Preencha todos os campos!'
@@ -120,12 +119,15 @@ const UpdateCadastro = () => {
             }
             api.defaults.headers.authorization = token ;
             const response = await api.put('/user/me', data);
-            if ( response.data) {
+            if (!response.data.error) {
                 window.location.reload();
                 history.push('/agenda');
             } else {
                 console.log(response)
-                setAlerta(dbValidationRegister(response));
+                setAlerta({
+                    type: 'error',
+                    msg: response.data.error
+                })
             }
         }
     };
@@ -138,13 +140,13 @@ const UpdateCadastro = () => {
     return (
         <div className="wrapper-cadastro">
             <h1>Atualizar</h1>
+            <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="update-form">
                 <Input label="Nome" type="text" value={nome} onChange={ (event) => validaNome(event) }/>
                 <Input label="E-mail" type="email" value={email} onChange={ (event) => validaEmail(event) }/>
                 <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
                 <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
-                <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             </div>
             <div className="update-btns" >
                 <Button type='button primary' onClick={onUpdate}>Atualizar</Button>
