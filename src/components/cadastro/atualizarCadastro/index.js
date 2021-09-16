@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { useLogged } from '../../../context/auth';
-import { dbValidationRegister } from '../../../services/dbValidations';
+import { dbValidationUserDelete, dbValidationUserUpdate } from '../../../services/dbValidations';
 import api from '../../../services/api';
 
 import { Button, LinkButton } from '../../dumb/button';
@@ -38,7 +38,6 @@ const UpdateCadastro = () => {
         }
     }, [])
 
-    //state senha listener
     useEffect(() => {
         verificaSenha(verifSenha);
     }, [senha]);
@@ -118,28 +117,47 @@ const UpdateCadastro = () => {
                 password: senha
             }
             api.defaults.headers.authorization = token ;
-            const response = await api.put('/user/me', data);
-            if (!response.data.error) {
+            await api.put('/user/me', data)
+            .then(response => {
+                setAlerta({})
                 window.location.reload();
                 history.push('/agenda');
-            } else {
-                console.log(response)
+                
+            }).catch(errors => {
+                const errorMsg = dbValidationUserUpdate(errors);
                 setAlerta({
-                    type: 'error',
-                    msg: response.data.error
-                })
-            }
+                    type: errorMsg.type,
+                    msg: errorMsg.msg
+                });
+                setLogged(false);
+            });
         }
     };
 
     const onDelete = async () => {
         api.defaults.headers.authorization =  token ;
-        const response = await api.delete('/user/me');
+        await api.delete('/user/me')
+        .then(() => {
+            setLogged(false);
+            setAlerta({
+                type: "sucess",
+                msg: 'Usuario excluido!'
+            })
+            history.push('/');
+            
+        }).catch(errors => {
+            const errorMsg = dbValidationUserDelete(errors);
+            setAlerta({
+                type: errorMsg.type,
+                msg: errorMsg.msg
+            });
+            setLogged(false);
+        });
     }
 
     return (
         <div className="wrapper-cadastro">
-            <h1>Atualizar</h1>
+            <h1>ATUALIZAR</h1>
             <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="update-form">

@@ -10,6 +10,20 @@
     margin-bottom: 0;
 }
 
+.fc-direction-ltr .fc-button-group > .fc-button{
+    background-color: #7474B4;
+}
+
+.fc .fc-button-primary:disabled {
+    background-color: #7474B4;
+    color: #fff;
+}
+
+.fc .fc-button-primary {
+    background-color: #7474B4;
+    color: #fff;
+}
+
 .fc-header-toolbar {
     background-color: #36357E;
     color: #ffffff;
@@ -52,7 +66,7 @@
     display: flex;
 }
 
-@media only screen and (max-width: 670px) {
+@media only screen and (max-width: 768px) {
 
     .fc {
         width: 300px;

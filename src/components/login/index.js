@@ -12,7 +12,6 @@ import { dbValidationLogin } from '../../services/dbValidations';
 
 import Logo from './logo.png';
 import './style.css';
-import axios from 'axios';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -21,7 +20,7 @@ const Login = () => {
 
     const { logged, setLogged } = useLogged();
 
-    let history = useHistory();
+    const history = useHistory();
 
     useEffect(()  =>  {
         if(Cookies.get('token')) {
@@ -35,7 +34,7 @@ const Login = () => {
     const validaEmail = (event) => {
         const value = event.target.value;
 
-        if ( value.includes("@") && value.includes(".com") ) {
+        if ( value.includes("@") && value.includes(".com") || value == '') {
             setEmail(value);
             setAlerta({});
         } else {
@@ -71,12 +70,12 @@ const Login = () => {
             });
             
         } else {
-
             const data = {
                 email: email,
                 password: senha
-            } 
-            const response = await api.post('/user/signin', data)
+            }
+
+            await api.post('/user/signin', data)
             .then(response => {
                 Cookies.set("token", response.data.token);
                 setAlerta([]);
@@ -84,31 +83,20 @@ const Login = () => {
                 history.push('/agenda');
                 
             }).catch(errors => {
-                    setAlerta({
-                        type: 'error',
-                        msg: 'Erro!'
-                    });
-                    setLogged(false);
+                const errorMsg = dbValidationLogin(errors);
+                setAlerta({
+                    type: errorMsg.type,
+                    msg: errorMsg.msg
+                });
+                setLogged(false);
             });
-            // if (Cookies.get("token") !== undefined){
-            //     setAlerta([]);
-            //     setLogged(true);
-            //     history.push('/agenda');
-            // } else {
-                
-            //     setAlerta({
-            //         type: 'error',
-            //         msg: response.data.error
-            //     });
-            //     setLogged(false);
-            // }
         };
     };
     
     return (
         <div className="wrapper">
             <div className="login-top">
-                <img src={Logo} />
+                <img src={Logo} alt="Logo do Grupo FCamara" />
                 <p>
                 Olá Sanque Laranja.<br/>
                 Agende seu retorno ao escritório,

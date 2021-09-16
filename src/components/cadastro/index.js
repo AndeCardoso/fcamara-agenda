@@ -37,9 +37,9 @@ const Cadastro = () => {
         }
     }, [])
 
-    //state senha listener
     useEffect(() => {
         verificaSenha(verifSenha);
+
     }, [senha]);
     
     const validaEmail = (event) => {
@@ -118,22 +118,27 @@ const Cadastro = () => {
                 msg: 'Preencha todos os campos!'
             })
         } else {
-            
-            const response = await api.post('/user/signup', data);
-
-            if ( response.data.token) {
+            await api.post('/user/signup', data)
+            .then(response => {
                 Cookies.set('token', response.data.token);
                 setLogged(true);
+                setAlerta({})
                 history.push('/agenda');
-            } else {
-                setAlerta(dbValidationRegister(response));
-            }
+                
+            }).catch(errors => {
+                const errorMsg = dbValidationRegister(errors);
+                setAlerta({
+                    type: errorMsg.type,
+                    msg: errorMsg.msg
+                });
+                setLogged(false);
+            });
         }
     };
     
     return (
         <div className="wrapper-register">
-            <h1>Cadastro</h1>
+            <h1>CADASTRO</h1>
             <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
             <div className="register-form">
