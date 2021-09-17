@@ -1,3 +1,97 @@
-.agenda {
-    width: 875px;
+.fc {
+    background-color: #ffffff;
+    color: #36357E;
+    width: 630px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button{
+    background-color: #7474B4;
+}
+
+.fc .fc-button-primary:disabled {
+    background-color: #7474B4;
+    color: #fff;
+}
+
+.fc .fc-button-primary {
+    background-color: #7474B4;
+    color: #fff;
+}
+
+.fc-header-toolbar {
+    background-color: #36357E;
+    color: #ffffff;
+    border-radius: 5px;
+    height: 40px;
+    margin-bottom: 0;
+}
+
+.fc-toolbar-title {
+    padding: 5px;
+    font-size: 15px;
+}
+
+.fc-button-group {
+    height: 40px;
+}
+
+.fc-event-title-container {
+    cursor: pointer;
+}
+
+.wrapper-agenda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.wrapper-agenda p {
+    width: auto;
+    font-size: 18px;
+    margin: 0;
+}
+
+.appoint-top {
+    width: 630px;
+}
+
+.appoint-btns {
+    display: flex;
+}
+
+@media only screen and (max-width: 768px) {
+
+    .fc {
+        width: 300px;
+    }
+
+    .appoint-top {
+        width: 300px;
+    }
+
+    .appoint-btns {
+        flex-direction: column;
+    }
+
+    .wrapper-agenda {
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .fc .fc-toolbar.fc-header-toolbar{
+        font-size: 10px;
+    }
+
+    .wrapper-agenda h1 {
+        font-size: 35px;
+    }
 }

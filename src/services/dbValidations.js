@@ -1,24 +1,17 @@
-export const dbValidationLogin = ( response ) => {
-    const status = response.data.error;
-    console.log(status)
+export const dbValidationLogin = ( errors ) => {
+    const status = errors.response.status;
     let alerta = {type: '', msg: ''};
     switch (status) {
-        case '300':
+        case 400:
             alerta = {
                 type: 'error',
-                msg: 'Formato de e-mail invalido!'
+                msg: 'Dados inválidos!'
             };
             return alerta;
-        case '301':
+        case 401:
             alerta = {
                 type: 'error',
-                msg: 'E-mail não cadastrado!'
-            };
-            return alerta;
-        case '302':
-            alerta = {
-                type: 'error',
-                msg: 'Senha incorreta!'
+                msg: 'E-mail ou senha inválido!'
             };
             return alerta;
         default:
@@ -30,27 +23,133 @@ export const dbValidationLogin = ( response ) => {
     }
 }
 
-export const dbValidationRegister = ( response ) => {
-    const status = response.data.status;
-    console.log(status)
+export const dbValidationRegister = ( errors ) => {
+    const status = errors.response.status;
     let alerta = {type: '', msg: ''};
     switch (status) {
-        case '300':
+        case 400:
             alerta = {
                 type: 'error',
-                msg: 'O nome precisa no minimo de 2 letras!'
+                msg: 'Dados inválidos!'
             };
             return alerta;
-        case '301':
+        case 409:
             alerta = {
                 type: 'error',
-                msg: 'Formato de e-mail invalido!'
+                msg: 'E-mail já cadastrado!'
             };
             return alerta;
-        case '302':
+        default:
             alerta = {
                 type: 'error',
-                msg: 'Senha precisa no minimo de 6 caracteres!'
+                msg: 'Um erro inesperado aconteceu!'
+            }
+            return alerta;
+    }
+}
+
+export const dbValidationUserInfo = ( errors ) => {
+    const status = errors.response.status;
+    let alerta = {type: '', msg: ''};
+    switch (status) {
+        case 401:
+            alerta = {
+                type: 'error',
+                msg: 'A sessão expirou!'
+            };
+            return alerta;
+        default:
+            alerta = {
+                type: 'error',
+                msg: 'Um erro inesperado aconteceu!'
+            }
+            return alerta;
+    }
+}
+
+export const dbValidationUserUpdate = ( errors ) => {
+    const status = errors.response.status;
+    let alerta = {type: '', msg: ''};
+    switch (status) {
+        case 400:
+            alerta = {
+                type: 'error',
+                msg: 'E-mail inválido!'
+            };
+            return alerta;
+        case 409:
+            alerta = {
+                type: 'error',
+                msg: 'E-mail já cadastrado!'
+            };
+            return alerta;
+        default:
+            alerta = {
+                type: 'error',
+                msg: 'Um erro inesperado aconteceu!'
+            }
+            return alerta;
+    }
+}
+
+export const dbValidationUserDelete = ( errors ) => {
+    const status = errors.response.status;
+    let alerta = {type: '', msg: ''};
+    switch (status) {
+        case 401:
+            alerta = {
+                type: 'error',
+                msg: 'A sessão expirou!'
+            };
+            return alerta;
+        default:
+            alerta = {
+                type: 'error',
+                msg: 'Um erro inesperado aconteceu!'
+            }
+            return alerta;
+    }
+}
+
+export const dbValidationSchedule = ( errors ) => {
+    const status = errors.response.status;
+    let alerta = {type: '', msg: ''};
+    switch (status) {
+        case 400:
+            alerta = {
+                type: 'error',
+                msg: 'Não há mais vagas para este dia!'
+            };
+            return alerta;
+        case 401:
+            alerta = {
+                type: 'error',
+                msg: 'Esta data já está agendada!'
+            };
+            return alerta;
+        case 404:
+            alerta = {
+                type: 'error',
+                msg: 'Erro ao agendar data!'
+            };
+            return alerta;
+        default:
+            alerta = {
+                type: 'error',
+                msg: 'Um erro inesperado aconteceu!'
+            }
+            return alerta;
+    }
+}
+
+export const dbValidationCancelAppoint = ( errors ) => {
+    const status = errors.response.status;
+    let alerta = {type: '', msg: ''};
+    switch (status) {
+        case 400:
+            alerta = {
+                type: 'error',
+                msg: 'A sessão expirou!'
             };
             return alerta;
         default:

@@ -6,7 +6,7 @@ import { useLogged } from '../../context/auth';
 import { dbValidationRegister } from '../../services/dbValidations';
 import api from '../../services/api';
 
-import { Button } from '../dumb/button';
+import { Button, LinkButton } from '../dumb/button';
 import Input from '../dumb/input';
 import Alert from '../dumb/alert';
 
@@ -37,15 +37,15 @@ const Cadastro = () => {
         }
     }, [])
 
-    //state senha listener
     useEffect(() => {
         verificaSenha(verifSenha);
+
     }, [senha]);
     
     const validaEmail = (event) => {
         const value = event.target.value;
 
-        if ( value.includes("@") && value.includes(".") ) {
+        if ( value.includes("@") && value.includes(".com") ) {
             setEmail(value);
             setAlerta({});
         } else {
@@ -118,31 +118,39 @@ const Cadastro = () => {
                 msg: 'Preencha todos os campos!'
             })
         } else {
-            
-            const response = await api.post('/user/signup', data);
-
-            if ( response.data.token) {
+            await api.post('/user/signup', data)
+            .then(response => {
                 Cookies.set('token', response.data.token);
                 setLogged(true);
+                setAlerta({})
                 history.push('/agenda');
-            } else {
-                setAlerta(dbValidationRegister(response));
-            }
+                
+            }).catch(errors => {
+                const errorMsg = dbValidationRegister(errors);
+                setAlerta({
+                    type: errorMsg.type,
+                    msg: errorMsg.msg
+                });
+                setLogged(false);
+            });
         }
     };
     
     return (
-        <div className="wrapper-cadastro">
-            <h1>Cadastro</h1>
+        <div className="wrapper-register">
+            <h1>CADASTRO</h1>
+            <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
             <Alert type={alerta.type} >{alerta.msg}</Alert>
-            <div className="form-cadastro">
+            <div className="register-form">
                 <Input label="Nome" type="text" onChange={ (event) => validaNome(event) }/>
                 <Input label="E-mail" type="email" onChange={ (event) => validaEmail(event) }/>
                 <Input label="Senha" type="password" onChange={ (event) => validaSenha(event) }/>
-                <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/> 
-                <Alert type={alertaSenha.type}>{alertaSenha.msg}</Alert>
+                <Input label="Confirmação de Senha" type="password" onChange={ (event) => verificaSenha(event.target.value) }/>  
             </div>
-            <Button type='commom' onClick={onClick}>Cadastrar</Button>
+            <div className="register-btns">
+                <Button type='button primary' onClick={onClick}>Cadastrar</Button>
+                <LinkButton type='button secondary' destiny='/' >Login</LinkButton>
+            </div>
         </div>
     );
 };

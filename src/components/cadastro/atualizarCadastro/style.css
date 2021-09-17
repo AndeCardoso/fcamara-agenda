@@ -4,8 +4,21 @@
     align-items: center;
 }
 
-.form-cadastro {
+.update-form {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+}
+
+.top-form {
+    display: flex;
+}
+
+.bottom-form {
+    display: flex;
+}
+
+.update-btns {
+    display: flex;
+    flex-direction: column;
 }

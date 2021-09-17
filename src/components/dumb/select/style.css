@@ -1,0 +1,25 @@
+.label-select {
+    flex-direction: row;
+    align-self: center;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+}
+
+.label-select span {
+    margin-right: 20px;
+}
+
+select {
+    padding: 0 15px;
+    border-radius: 5px;
+    text-align: center;
+    border: none;
+    color: #36357E;
+    cursor: pointer;
+}
+
+select option {
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+}
